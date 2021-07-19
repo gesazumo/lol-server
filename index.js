@@ -2,39 +2,48 @@
 import express from 'express'
 const app = express()
 const port = 3000
+import cors from 'cors'
 
-import axios from 'axios'
-
-const riotApiKey = 'RGAPI-11ee0d58-7e62-4e1e-9916-d6e67e551861'
-const RIOT_API_URL = 'https://kr.api.riotgames.com/lol/summoner/v4/summoners/'
-
-import {userInfo} from './riotApi.js'
-
-function createInstance() {
-	return axios.create({
-		baseURL: RIOT_API_URL,
-		headers: { 'X-Riot-Token': riotApiKey },
-	})
-}
-
-const url = {
-	search: 'by-name/',
-}
-
- const instance = createInstance()
+import {fetchUserInfo, fetchRotationChamps, fetchUserRankInfo} from './riotApi.js'
 
 
+app.use(cors())
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello Riot API World!')
 })
 
-app.get('/searchUser/:userName', (req, res) => {
-    console.log(req.params.userName)
-    userInfo()
-    instance.get(`${url.search}${req.params.userName}`).then(ress => {
-        return res.json(ress.data)
-    })
-  })
+app.get('/searchUser/:userName', async (req, res) => {
+    try{
+        const {data} = await fetchUserInfo(req.params.userName)
+        return res.json(data)
+    }
+    catch (error) {
+        console.log(error.response.data)
+        return res.json(error.response.data)
+    }  
+})
+
+app.get('/getUserInfo/:id', async (req, res) => {
+  try{
+      const {data} = await fetchUserRankInfo(req.params.id)
+      return res.json(data)
+  }
+  catch (error) {
+      console.log(error.response.data)
+      return res.json(error.response.data)
+  }  
+})
+
+app.get('/rotation', async (req, res) => {
+  try{
+      const {data} = await fetchRotationChamps()
+      return res.json(data)
+  }
+  catch (error) {
+      console.log(error.response.data)
+      return res.json(error.response.data)
+  }  
+})
 
 
 app.listen(port, () => {
