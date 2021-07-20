@@ -33,9 +33,11 @@ const fetchUserRankInfo = (id) => {
 	return instance.get(`${url.rank}${id}`)
 }
 
-// fetchUserInfo에서 받아온 id 값사용
-const fetchRecentGames = (id) => {
-	return instance.get(`${url.recentGames}${id}`)
+// fetchUserInfo에서 받아온 accountId 값사용
+const fetchRecentGames = (id, beginIndex, endIndex) => {
+	return instance.get(`${url.recentGames}${id}`, {
+		params: { beginIndex, endIndex },
+	})
 }
 
 export {fetchUserInfo, fetchRotationChamps, fetchUserRankInfo, fetchRecentGames}

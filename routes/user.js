@@ -13,7 +13,7 @@ userRouter.get('/find/:userName', async (req, res, next) => {
     }
 })
 
-userRouter.get('/info/:id', async (req, res) => {
+userRouter.get('/info/:id', async (req, res, next) => {
     try{
         const {data} = await fetchUserRankInfo(req.params.id)
         return res.json(data)
@@ -23,9 +23,9 @@ userRouter.get('/info/:id', async (req, res) => {
     }  
 })
 
-userRouter.get('/recentGames/:id', async (req, res) => {
+userRouter.get('/recentGames/:id', async (req, res, next) => {
     try{
-        const {data} = await fetchRecentGames(req.params.id)
+        const {data} = await fetchRecentGames(req.params.id, req.params.beginIndex, req.params.endIndex)
         return res.json(data)
     }
     catch (err) {
