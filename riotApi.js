@@ -1,7 +1,7 @@
 
 import axios from 'axios'
 
-const riotApiKey = 'RGAPI-8f11e714-f3f4-43a9-a224-5a6473471c49'
+const riotApiKey = 'RGAPI-6db6a9f2-98d7-45ad-91f8-48e5f290d722'
 const RIOT_API_URL = 'https://kr.api.riotgames.com/lol/'
 
 function createInstance() {
