@@ -3,7 +3,7 @@ import {fetchRotationChamps} from '../riotApi.js'
 
 const initRouter = express.Router()
 
-initRouter.get('/rotation', async (req, res) => {
+initRouter.get('/rotation', async (req, res, next) => {
     try{
         const {data} = await fetchRotationChamps()
         return res.json(data)
