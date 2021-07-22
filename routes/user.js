@@ -1,6 +1,6 @@
 import express from 'express'
 import { FLEX_RANK, SOLE_RANK } from '../constant.js'
-import {fetchRecentGames, fetchUserInfo, fetchUserRankInfo} from '../riotApi.js'
+import {fetchGameInfo, fetchRecentGames, fetchUserInfo, fetchUserRankInfo} from '../riotApi.js'
 
 const userRouter = express.Router()
 
@@ -34,8 +34,16 @@ userRouter.get('/info/:id', async (req, res, next) => {
 
 userRouter.get('/recentGames/:id', async (req, res, next) => {
     try{
-        const {data} = await fetchRecentGames(req.params.id, req.params.beginIndex, req.params.endIndex)
-        return res.json(data)
+        const {data} = await fetchRecentGames(req.params.id, req.query.beginIndex, req.query.endIndex)
+        const recentGames = data
+        recentGames.matches.forEach(async (game) => {
+            const {data} = await fetchGameInfo(game.gameId)
+            game["detail"] = data
+            console.log(recentGames.matches)
+        })
+        
+
+        return res.json(recentGames)
     }
     catch (err) {
         next(err)

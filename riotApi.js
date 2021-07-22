@@ -15,7 +15,8 @@ const url = {
 	search: 'summoner/v4/summoners/by-name/',
 	rotation: 'platform/v3/champion-rotations',
 	rank: 'league/v4/entries/by-summoner/',
-	recentGames: 'match/v4/matchlists/by-account/'
+	recentGames: 'match/v4/matchlists/by-account/',
+	gameInfo: 'match/v4/matches/'
 }
 
 const instance = createInstance()
@@ -40,4 +41,9 @@ const fetchRecentGames = (id, beginIndex, endIndex) => {
 	})
 }
 
-export {fetchUserInfo, fetchRotationChamps, fetchUserRankInfo, fetchRecentGames}
+const fetchGameInfo = (gameId) => {
+	return instance.get(`${url.gameInfo}${gameId}`)
+	
+}
+
+export {fetchUserInfo, fetchRotationChamps, fetchUserRankInfo, fetchRecentGames, fetchGameInfo}
