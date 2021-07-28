@@ -36,25 +36,14 @@ userRouter.get('/recentGames/:id', async (req, res, next) => {
     try{
         const {data} = await fetchRecentGames(req.params.id, req.query.beginIndex, req.query.endIndex)
         const recentGames = data
-        // const gameList = await Promise.all (
-        //     recentGames.matches.map(async (game) => {
-        //         const {data} = await fetchGameInfo(game.gameId)
-        //         game["detail"] = data
-        //         return game
-        //     })
-        // )
-        recentGames.matches.reduce(
-            async (prevPromise, game) => {
-                const {data} = await prevPromise()
-                game["detail"] = data
-                return fetchGameInfo(game.gameId)
-            }, 
-            Promise.resolve()
-        ).then((ress) => {
-            console.log(ress)
-            return res.json(recentGames)
-        })
-
+         
+        const result = await Promise.all(recentGames.matches.map(async (game) => {
+            const {data} = await fetchGameInfo(game.gameId)
+            game["detail"] = data
+            return game
+        }))
+        
+        return res.json(result)
     }
     catch (err) {
         next(err)
