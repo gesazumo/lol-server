@@ -1,7 +1,7 @@
 
 import axios from 'axios'
 
-const riotApiKey = 'RGAPI-f1f931c6-8d5d-46a1-9473-2bf6e080bb68'
+const riotApiKey = 'RGAPI-27194437-4324-40c5-824a-4e38452f0491'
 const RIOT_API_URL = 'https://kr.api.riotgames.com/lol/'
 
 function createInstance() {
@@ -22,7 +22,8 @@ const url = {
 const instance = createInstance()
 
 const fetchUserInfo = (userName) => {
-    return instance.get(`${url.search}${userName}`)
+	
+    return instance.get(encodeURI(url.search+userName))
 }
 
 const fetchRotationChamps = () => {
