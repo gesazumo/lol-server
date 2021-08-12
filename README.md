@@ -13,6 +13,5 @@ Visual Studio Code
 ## 실행방법
 ```
 https://developer.riotgames.com 로그인 후 DEVELOPMENT API KEY 를 받아서 
-해당소스의 riotApi.js의 4번째 라인 riotApiKey 변수값으로 셋팅.
-Git Clone -> npm install -> node index.js
+.env파일의 RIOT_API_KEY 변수에 할당해주고 실행한다.
 ```
