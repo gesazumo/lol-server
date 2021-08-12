@@ -6,7 +6,6 @@ Node.js
 Express
 Javascript es6
 Git
-Chrome
 Visual Studio Code
 ```
 
