@@ -7,7 +7,7 @@ import cors from 'cors'
 import userRouter from './routes/user.js'
 import initRouter from './routes/init.js'
 import { errorHandler } from './util.js'
-
+import "./env.js"
 
 app.use(cors())
 
