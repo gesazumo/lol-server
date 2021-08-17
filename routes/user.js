@@ -50,5 +50,53 @@ userRouter.get('/recentGames/:id', async (req, res, next) => {
     }  
 })
 
+userRouter.get('/recentGameSummary/:id', async (req, res, next) => {
+    try{
+
+        const avrCount = 5
+        const {data} = await fetchRecentGames(req.params.id, 0, avrCount)
+        const recentGames = data
+         
+        const result = await Promise.all(recentGames.matches.map(async (game) => {
+            const {data} = await fetchGameInfo(game.gameId)
+            game["detail"] = data
+            return game
+        }))
+
+        let win = 0
+        let lose = 0
+        let kills = 0
+        let deaths = 0
+        let assists = 0
+
+        result.forEach(game => {
+            const userIndex = game.detail.participantIdentities.findIndex(pid => {
+                return pid.player.accountId == req.params.id
+            })
+
+            const participants = game.detail.participants[userIndex]
+            if(participants.stats.win) win++
+            else lose++
+
+            kills = kills + participants.stats.kills
+            deaths = deaths + participants.stats.deaths
+            assists = assists + participants.stats.assists
+        })
+
+        const summaryData = {
+            win,
+            lose,
+            winRate: win/avrCount*100,
+            killAvg:kills/avrCount,
+            deathAvg:deaths/avrCount,
+            assistAvg:assists/avrCount
+        }
+        return res.json(summaryData)
+    }
+    catch (err) {
+        next(err)
+    }
+})
+
 
 export default userRouter 
