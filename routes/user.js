@@ -69,17 +69,8 @@ userRouter.get('/recentGameSummary/:id', async (req, res, next) => {
             totalKills: 0,
             totalDeaths: 0,
             totalAssists: 0,
-            gameList: [
-                {
-                    win: true,
-                    kill:0,
-                    deaths: 0,
-                    asi: 0,
-                    champion: 0,
-                    teamKill: 0,
-                    line: ''
-                }
-            ]   
+            gameList: [],
+            avrCount
         }
         
         let totalKills = 0
@@ -89,7 +80,7 @@ userRouter.get('/recentGameSummary/:id', async (req, res, next) => {
             })
 
             const participants = game.detail.participants[userIndex]
-            if(participants.stats.win) summary.win++
+            if(participants.stats.win) summary.totalWin++
             else summary.totalLose++
 
             summary.totalKills = summary.totalKills + participants.stats.kills
