@@ -15,7 +15,7 @@ app.use('/init', initRouter)
 app.use('/users', userRouter)
 
 app.get('/', (req, res) => {
-  return res.json({aa:1})
+  return res.json({result:true})
 })
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
