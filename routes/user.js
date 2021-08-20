@@ -50,5 +50,76 @@ userRouter.get('/recentGames/:id', async (req, res, next) => {
     }  
 })
 
+userRouter.get('/recentGameSummary/:id', async (req, res, next) => {
+    try{
+
+        const avrCount = 5
+        const {data} = await fetchRecentGames(req.params.id, 0, avrCount)
+        const recentGames = data
+         
+        const result = await Promise.all(recentGames.matches.map(async (game) => {
+            const {data} = await fetchGameInfo(game.gameId)
+            game["detail"] = data
+            return game
+        }))
+
+        const summary = {
+            totalWin:0,
+            totalLose:0,
+            totalKills: 0,
+            totalDeaths: 0,
+            totalAssists: 0,
+            gameList: [],
+            avrCount
+        }
+        
+        let totalKills = 0
+        result.forEach(game => {
+            const userIndex = game.detail.participantIdentities.findIndex(pid => {
+                return pid.player.accountId == req.params.id
+            })
+
+            const participants = game.detail.participants[userIndex]
+            if(participants.stats.win) summary.totalWin++
+            else summary.totalLose++
+
+            summary.totalKills = summary.totalKills + participants.stats.kills
+            summary.totalDeaths = summary.totalDeaths + participants.stats.deaths
+            summary.totalAssists = summary.totalAssists + participants.stats.assists
+
+            summary.gameList.push({
+                win: participants.stats.win,
+                kills: participants.stats.kills,
+                deaths: participants.stats.deaths,
+                assists: participants.stats.assists,
+                championId: participants.championId,
+                line: ''
+            })
+            
+            const gameKill = game.detail.participants
+            .filter(prt => {
+                return participants.teamId == prt.teamId
+            })
+            .map(prt => {
+                return prt.stats.kills
+            })
+            .reduce((arr, cntKill) => {
+                return arr + cntKill
+            })
+
+            totalKills = totalKills + gameKill
+        })
+
+        const summaryData = {
+            teamTotalKills : totalKills,
+            ...summary
+        }
+        return res.json(summaryData)
+    }
+    catch (err) {
+        next(err)
+    }
+})
+
 
 export default userRouter 

@@ -1,10 +1,11 @@
 
 import axios from 'axios'
-
-const riotApiKey = 'RGAPI-f1f931c6-8d5d-46a1-9473-2bf6e080bb68'
+import "./env.js"
+const riotApiKey = process.env.RIOT_API_KEY
 const RIOT_API_URL = 'https://kr.api.riotgames.com/lol/'
 
 function createInstance() {
+	console.log(riotApiKey)
 	return axios.create({
 		baseURL: RIOT_API_URL,
 		headers: { 'X-Riot-Token': riotApiKey },
@@ -22,7 +23,8 @@ const url = {
 const instance = createInstance()
 
 const fetchUserInfo = (userName) => {
-    return instance.get(`${url.search}${userName}`)
+	
+    return instance.get(encodeURI(url.search+userName))
 }
 
 const fetchRotationChamps = () => {
