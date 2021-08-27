@@ -1,5 +1,4 @@
 import express from 'express'
-import PostModel from '../models/PostModel.js'
 import {fetchRotationChamps} from '../riotApi.js'
 
 const initRouter = express.Router()
