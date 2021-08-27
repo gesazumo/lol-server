@@ -53,7 +53,7 @@ userRouter.get('/recentGames/:id', async (req, res, next) => {
 userRouter.get('/recentGameSummary/:id', async (req, res, next) => {
     try{
 
-        const avrCount = 10
+        const avrCount = 5
         const {data} = await fetchRecentGames(req.params.id, 0, avrCount)
         const recentGames = data
          
