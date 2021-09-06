@@ -20,18 +20,19 @@ postRouter.post('', async (req, res, next) => {
 
 postRouter.get('', async (req, res, next) => {
     try {
-        const {from, to, recruitPosition, queueType, voice} = req.query
-
+        const {page, recruitPosition, queueType, voice} = req.query
+        const count = 12
         const filter = {
             recruitPosition,
             queueType,
             voice : voice && (voice == 'true' ? true : false)
         }
 
-        const posts = await PostModel.find(getFilter(filter))
-        .sort({createDate:'desc'}).
-        skip(Number(from)).
-        limit((Number(to)-Number(from)))
+        // const posts = await PostModel.find(getFilter(filter))
+        const posts = await PostModel.find()
+        .sort({createDate:'desc'})
+        .skip((Number(page)-1) * count)
+        .limit(count)
         
         posts.length > 0 ? res.json(posts) : res.status(204).send()
     }
