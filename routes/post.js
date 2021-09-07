@@ -28,6 +28,12 @@ postRouter.get('', async (req, res, next) => {
         }
 
         // const posts = await PostModel.find(getFilter(filter))
+
+        const aa = await Promise.all([
+            PostModel.count(),
+            PostModel.find().sort({createDate:'desc'}).skip((Number(page)-1) * count).limit(count)
+        ])
+        
         const posts = await PostModel.find()
         .sort({createDate:'desc'})
         .skip((Number(page)-1) * count)
