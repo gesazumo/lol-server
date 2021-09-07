@@ -1,6 +1,5 @@
 import express from 'express'
 import PostModel from '../models/PostModel.js'
-import { getFilter } from '/project/vue-til-server/util.js'
 
 const postRouter = express.Router()
 
