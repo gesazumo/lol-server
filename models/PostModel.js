@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { POSITION, QUEUE_TYPE } from '../constant.js';
+import { ADD_FRIEND_TIME_LIST, POSITION, QUEUE_TYPE } from '../constant.js';
 const { Schema } = mongoose;
 
 const posts = new Schema({
@@ -11,10 +11,14 @@ const posts = new Schema({
         enum: QUEUE_TYPE,
         required: true
     },
-    recruitPosition: {
+    positionType: {
         type: String,
         enum: POSITION,
         default: 'none'
+    },
+    addFriendTime: {
+        type: String,
+        enum: ADD_FRIEND_TIME_LIST
     },
     voice: {
         type: Boolean,
