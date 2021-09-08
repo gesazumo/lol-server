@@ -18,25 +18,15 @@ postRouter.post('', async (req, res, next) => {
 
 postRouter.get('', async (req, res, next) => {
     try {
-        const {page, recruitPosition, queueType, voice} = req.query
+        const {page, ...filter} = req.query
         const count = 12
-        const filter = {
-            recruitPosition,
-            queueType,
-            voice : voice && (voice == 'true' ? true : false)
-        }
-
-        // const posts = await PostModel.find(getFilter(filter))
-
-        const totalCount = await Promise.all([
-            PostModel.count(),
-            PostModel.find().sort({createDate:'desc'}).skip((Number(page)-1) * count).limit(count)
-        ])
         
-        const posts = await PostModel.find()
-        .sort({createDate:'desc'})
-        .skip((Number(page)-1) * count)
-        .limit(count)
+        if(filter.voice) filter.voice = (filter.voice == 'true')
+
+        const [posts, totalCount] = await Promise.all([
+            PostModel.find(filter).sort({createDate:'desc'}).skip((Number(page)-1) * count).limit(count),
+            PostModel.countDocuments(filter),
+        ])
         
         totalCount > 0 ? res.json({posts, totalCount}) : res.status(204).send()
     }
@@ -55,9 +45,5 @@ postRouter.get('/:id', async (req, res, next) => {
         next(err)
     }
 })
-
-// pull request
-// pull request1
-// pull request2
 
 export default postRouter 
