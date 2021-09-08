@@ -4,13 +4,12 @@ import PostModel from '../models/PostModel.js'
 const postRouter = express.Router()
 
 postRouter.post('', async (req, res, next) => {
-    try{
+    try {
         const newPost = new PostModel({
             ...req.body,
         })
         const result = await newPost.save()
-        res.json(result)
-        
+        res.json(result)   
     }
     catch(err) {
         next(err)
@@ -29,7 +28,7 @@ postRouter.get('', async (req, res, next) => {
 
         // const posts = await PostModel.find(getFilter(filter))
 
-        const aa = await Promise.all([
+        const totalCount = await Promise.all([
             PostModel.count(),
             PostModel.find().sort({createDate:'desc'}).skip((Number(page)-1) * count).limit(count)
         ])
@@ -39,7 +38,7 @@ postRouter.get('', async (req, res, next) => {
         .skip((Number(page)-1) * count)
         .limit(count)
         
-        posts.length > 0 ? res.json(posts) : res.status(204).send()
+        totalCount > 0 ? res.json({posts, totalCount}) : res.status(204).send()
     }
     catch(err) {
         next(err)

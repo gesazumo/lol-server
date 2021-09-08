@@ -37,10 +37,7 @@ userRouter.get('/recentGames/:id', async (req, res, next) => {
         const {data} = await fetchRecentGames(req.params.id, req.query.beginIndex, req.query.endIndex)
         const recentGames = data
          
-        
         const result = await Promise.all(recentGames.matches.map(async (game) => {
-            // 여기서(44라인) await 걸면 동기적으로 하나씩 기다렷다가 하는거 아니냐??
-            // 안걸고 result 받아서 for문돌면서 그냥 다시 detail에 꽂아주는게 더 빠른가???
             const {data} = await fetchGameInfo(game.gameId)
             game["detail"] = data
             return game
@@ -60,11 +57,6 @@ userRouter.get('/recentGameSummary/:id', async (req, res, next) => {
         const {data} = await fetchRecentGames(req.params.id, 0, avrCount)
         const recentGames = data
          
-        const arr = recentGames.matches.map(async (game) => {
-            return fetchGameInfo(game.gameId)
-         })
-        const aa = await Promise.all(arr)
-        
         const result = await Promise.all(recentGames.matches.map(async (game) => {
             const {data} = await fetchGameInfo(game.gameId)
             game["detail"] = data
