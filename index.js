@@ -8,6 +8,7 @@ import mongoose from 'mongoose';
 import userRouter from './routes/user.js'
 import initRouter from './routes/init.js'
 import postRouter from './routes/post.js'
+import boardRouter from './routes/board.js'
 import { errorHandler } from './util.js'
 
 app.use(cors())
@@ -16,6 +17,7 @@ app.use(express.json())
 app.use('/init', initRouter)
 app.use('/users', userRouter)
 app.use('/posts', postRouter)
+app.use('/boards', boardRouter)
 
 app.get('/', (req, res) => {
   return res.json({result:true})
